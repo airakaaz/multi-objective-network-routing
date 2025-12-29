@@ -24,7 +24,9 @@ class Graph:
 
     def add_node(self, id_, src=False, dest=False):
         node = Node(id_)
-        self.nodes[id_] = node
+
+        if id_ not in self.nodes:
+            self.nodes[id_] = node
 
         if src:
             self.src = node
@@ -41,7 +43,7 @@ class Graph:
         self.nodes[id_1].successors.add(self.nodes[id_2])
         self.nodes[id_2].predecessors.add(self.nodes[id_1])
         if self.symetric:
-            # self.edges[(id_2, id_2)] = (lat, risk) # might need later
+            self.edges[(id_2, id_1)] = (lat, risk)
             self.nodes[id_2].successors.add(self.nodes[id_1])
             self.nodes[id_1].predecessors.add(self.nodes[id_2])
 
@@ -55,7 +57,7 @@ class Graph:
         """
         self.symetric = next(data)[:-1] == "1"
         self.add_node(next(data)[:-1], src=True)
-        self.add_node(next(data)[:-1], src=False)
+        self.add_node(next(data)[:-1], dest=True)
         for line in data:
             n1, n2, lat, risk = line.split(sep=",")
             self.add_edge(n1, n2, float(lat), float(risk))
@@ -64,8 +66,6 @@ class Graph:
         self.vis = nx.Graph() if self.symetric else nx.DiGraph()
         nodes = [n.id for n in self.nodes.values()]
         edges = [(*k, self.get_weight(*v)) for k, v in self.edges.items()]
-        print(nodes)
-        print(edges)
         self.vis.add_nodes_from(nodes)
         self.vis.add_weighted_edges_from(edges)
         nx.draw(self.vis, with_labels=True)
