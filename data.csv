@@ -1,0 +1,15 @@
+1
+src
+dest
+src,a,10,2
+src,b,50,1
+src,c,20,5
+a,d,10,2
+a,e,30,8
+b,d,20,1
+b,f,100,1
+c,e,10,5
+d,dest,40,2
+d,e,10,3
+e,dest,10,9
+f,dest,10,1
