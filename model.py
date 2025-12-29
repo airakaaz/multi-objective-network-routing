@@ -29,7 +29,7 @@ class Graph:
         if src:
             self.src = node
         if dest:
-            self.dest = dest
+            self.dest = node
 
     def add_edge(self, id_1, id_2, lat, risk):
         if id_1 not in self.nodes.keys():
