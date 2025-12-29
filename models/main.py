@@ -9,8 +9,8 @@ class graph:
             self.nodes_table=nodes_table
         self.weighted_edges_table=weighted_edges_table
         self.nodes_positions=nodes_positions
-        self.source_found=0
-        self.destination_found=0
+        self.source_found=False
+        self.destination_found=False
         self.graph=None
         self.symetric=symetric
 
@@ -18,9 +18,11 @@ class graph:
         
         if self.nodes_table==None:
             self.nodes_table=[]
-        if is_source:
+        if is_source and not(self.source_found):
+            self.source_found=True
             self.nodes_table=[node]+self.nodes_table
-        elif is_destination:
+        elif is_destination and not(self.destination_found):
+            self.destination_found=True
             self.nodes_table=self.nodes_table+[node]
         else:
             self.nodes_table.insert(max(len(self.nodes_table)-1,1),node)
@@ -65,3 +67,5 @@ class graph:
             edge_labels=edge_labes
             )
         plt.show()
+
+
