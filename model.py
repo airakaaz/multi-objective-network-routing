@@ -10,13 +10,12 @@ class Node:
 
 
 class Graph:
-    def __init__(self, weight_func, symetric=True, path=None):
+    def __init__(self, symetric=True, path=None):
         self.symetric = symetric
         self.src = None
         self.dest = None
         self.nodes = {}
         self.edges = {}
-        self.get_weight = weight_func
 
         if path:
             with open(path) as data:
@@ -62,10 +61,10 @@ class Graph:
             n1, n2, lat, risk = line.split(sep=",")
             self.add_edge(n1, n2, float(lat), float(risk))
 
-    def visualize(self):
+    def visualize(self, weight_func):
         self.vis = nx.Graph() if self.symetric else nx.DiGraph()
         nodes = [n.id for n in self.nodes.values()]
-        edges = [(*k, self.get_weight(*v)) for k, v in self.edges.items()]
+        edges = [(*k, weight_func(*v)) for k, v in self.edges.items()]
         self.vis.add_nodes_from(nodes)
         self.vis.add_weighted_edges_from(edges)
         nx.draw(self.vis, with_labels=True)
