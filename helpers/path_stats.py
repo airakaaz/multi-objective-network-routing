@@ -1,10 +1,3 @@
-def comb_gen(a, b):
-    def combiner(lat, risk):
-        return a * lat + b * risk
-
-    return combiner
-
-
 def path_stats(graph, path):
     lat = risk = 0
     curr = path[0]

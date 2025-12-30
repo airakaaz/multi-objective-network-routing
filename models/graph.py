@@ -1,12 +1,6 @@
 import networkx as nx
 import matplotlib.pyplot as plt
-
-
-class Node:
-    def __init__(self, id_):
-        self.id = id_
-        self.predecessors = set()
-        self.successors = set()
+from . import Node
 
 
 class Graph:
