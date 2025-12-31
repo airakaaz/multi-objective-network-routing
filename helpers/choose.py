@@ -2,7 +2,7 @@ def choose(msg, condition, err="invalid option"):
     while True:
         try:
             print()
-            choice = int(input(msg))
+            choice = input(msg)
         except ValueError:
             choice = None
 

@@ -9,7 +9,7 @@ def get_risk(path):
     return path["cost"][1]
 
 
-def select_path(paths, lat, risk):
+def select_pareto_path(paths, lat, risk):
     if lat is None and risk is None:
         raise ValueError("l and r cannot both be None")
 

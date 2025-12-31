@@ -1,8 +1,8 @@
 from tkinter import filedialog
 
 from models import Graph
-from algorithms import dijkstra, pareto_front
-from helpers import choose, comb_gen, path_stats, select_path
+from algorithms import dijkstra, pareto_front, floyd_warshall
+from helpers import choose, comb_gen, get_floyd_path, path_stats, select_pareto_path
 
 
 def graph_selector():
@@ -51,14 +51,16 @@ def graph_selector():
 
 
 def use_dijkstra(graph):
-    choice = choose(
-        """mode:
+    choice = int(
+        choose(
+            """mode:
                 [1]: minimize latency
                 [2]: minimize risk
                 [3]: custom: weight = a*latency + b*risk
                 [0]: cancel
             ---> """,
-        lambda c: c in (0, 1, 2, 3),
+            lambda c: int(c) in (0, 1, 2, 3),
+        )
     )
     match choice:
         case 1:
@@ -66,22 +68,69 @@ def use_dijkstra(graph):
         case 2:
             a, b = 0, 1
         case 3:
-            a = choose(
-                "             a = ", lambda a: a > 0, "a must be strictly positive"
+            a = int(
+                choose(
+                    "             a = ",
+                    lambda a: int(a) > 0,
+                    "a must be strictly positive",
+                )
             )
-            b = choose(
-                "             b = ", lambda b: b > 0, "b must be strictly positive"
+            b = int(
+                choose(
+                    "             b = ",
+                    lambda b: int(b) > 0,
+                    "b must be strictly positive",
+                )
             )
         case 0:
             return
     path_stats(graph, dijkstra(graph, comb_gen(a, b)))
 
 
+def use_floyd_warshall(graph):
+    choice = int(
+        choose(
+            """mode:
+                [1]: minimize latency
+                [2]: minimize risk
+                [3]: custom: weight = a*latency + b*risk
+                [0]: cancel
+            ---> """,
+            lambda c: int(c) in (0, 1, 2, 3),
+        )
+    )
+    match choice:
+        case 1:
+            a, b = 1, 0
+        case 2:
+            a, b = 0, 1
+        case 3:
+            a = int(
+                choose(
+                    "             a = ",
+                    lambda a: int(a) > 0,
+                    "a must be strictly positive",
+                )
+            )
+            b = int(
+                choose(
+                    "             b = ",
+                    lambda b: int(b) > 0,
+                    "b must be strictly positive",
+                )
+            )
+        case 0:
+            return
+    table = floyd_warshall(graph, comb_gen(a, b))
+    path_stats(graph, get_floyd_path(graph, table))
+
+
 def use_pareto_front(graph):
     paths = pareto_front(graph)
 
-    choice = choose(
-        """mode:
+    choice = int(
+        choose(
+            """mode:
                 [1]: minimize latency
                 [2]: minimize risk
                 [3]: custom: weight = a*latency + b*risk
@@ -89,50 +138,72 @@ def use_pareto_front(graph):
                 [5]: minimize risk with threshold on latency
                 [0]: cancel
             ---> """,
-        lambda c: c in (0, 1, 2, 3, 4, 5),
+            lambda c: int(c) in (0, 1, 2, 3, 4, 5),
+        )
     )
 
     match choice:
         case 1:
-            path_stats(graph, select_path(paths, 1, 0))
+            path_stats(graph, select_pareto_path(paths, 1, 0))
         case 2:
-            path_stats(graph, select_path(paths, 0, 1))
+            path_stats(graph, select_pareto_path(paths, 0, 1))
         case 3:
-            a = choose(
-                "             a = ", lambda a: a > 0, "a must be strictly positive"
+            a = int(
+                choose(
+                    "             a = ",
+                    lambda a: int(a) > 0,
+                    "a must be strictly positive",
+                )
             )
-            b = choose(
-                "             b = ", lambda b: b > 0, "b must be strictly positive"
+            b = int(
+                choose(
+                    "             b = ",
+                    lambda b: int(b) > 0,
+                    "b must be strictly positive",
+                )
             )
-            path_stats(graph, select_path(paths, a, b))
+            path_stats(graph, select_pareto_path(paths, a, b))
         case 4:
-            t = choose(
-                "     threshold = ", lambda t: t > 0, "a must be strictly positive"
+            t = int(
+                choose(
+                    "     threshold = ",
+                    lambda t: int(t) > 0,
+                    "a must be strictly positive",
+                )
             )
-            path_stats(graph, select_path(paths, None, t))
+            path_stats(graph, select_pareto_path(paths, None, t))
         case 5:
-            t = choose(
-                "     threshold = ", lambda t: t > 0, "a must be strictly positive"
+            t = int(
+                choose(
+                    "     threshold = ",
+                    lambda t: int(t) > 0,
+                    "a must be strictly positive",
+                )
             )
-            path_stats(graph, select_path(paths, t, None))
+            path_stats(graph, select_pareto_path(paths, t, None))
         case 0:
             return
 
 
 def get_path(graph):
-    choice = choose(
-        """algorithms:
+    choice = int(
+        choose(
+            """algorithms:
             [1]: dijkstra
-            [2]: pareto front
+            [2]: floyd marshall
+            [3]: pareto front
             [0]: return
         ---> """,
-        lambda c: c in (0, 1, 2),
+            lambda c: int(c) in (0, 1, 2, 3),
+        )
     )
 
     match choice:
         case 1:
             use_dijkstra(graph)
         case 2:
+            use_floyd_warshall(graph)
+        case 3:
             use_pareto_front(graph)
         case 0:
             return
