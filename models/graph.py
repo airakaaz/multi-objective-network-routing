@@ -97,7 +97,7 @@ class Graph:
 
         return pos
 
-    def visualize(self, weight_func=None):
+    def visualize(self, weight_func=None, block=True):
         if weight_func is None:
             weight_func = comb_gen(1, 1)
 
@@ -131,4 +131,4 @@ class Graph:
             self.vis, pos=pos, edge_labels=labels, label_pos=0.3
         )
 
-        plt.show(block=False)
+        plt.show(block=block)
