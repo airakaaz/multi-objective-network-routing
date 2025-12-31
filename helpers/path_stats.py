@@ -1,4 +1,8 @@
 def path_stats(graph, path):
+    if path is None:
+        print("path is None")
+        return
+
     lat = risk = 0
     curr = path[0]
     print(curr, end=" ")
