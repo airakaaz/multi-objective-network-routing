@@ -2,7 +2,14 @@ from tkinter import filedialog
 
 from models import Graph
 from algorithms import dijkstra, pareto_front, floyd_warshall
-from helpers import choose, comb_gen, get_floyd_path, path_stats, select_pareto_path
+from helpers import (
+    choose,
+    comb_gen,
+    get_dijkstra_path,
+    get_floyd_path,
+    path_stats,
+    select_pareto_path,
+)
 
 
 def graph_selector():
@@ -84,7 +91,36 @@ def use_dijkstra(graph):
             )
         case 0:
             return
-    path_stats(graph, dijkstra(graph, comb_gen(a, b)))
+
+    src = choose(
+        "pick source (leave empty for default graph source):",
+        lambda n: (n in graph.nodes or n == ""),
+    )
+    if not src:
+        src = graph.src.id
+
+    table = dijkstra(graph, comb_gen(a, b), src)
+
+    flag = True
+    while flag:
+        dest = choose(
+            "pick destination (leave empty for default graph destination):",
+            lambda n: (n in graph.nodes or n == ""),
+        )
+        if not dest:
+            dest = graph.dest.id
+
+        path_stats(graph, get_dijkstra_path(graph, table, dest=dest))
+
+        flag = int(
+            choose(
+                """pick another destination ?
+        [1]: yes
+        [0]: no
+    ---> """,
+                lambda x: int(x) in (0, 1),
+            )
+        )
 
 
 def use_floyd_warshall(graph):

@@ -1,5 +1,11 @@
 from models import Graph
-from helpers import comb_gen, get_floyd_path, path_stats, select_pareto_path
+from helpers import (
+    comb_gen,
+    get_dijkstra_path,
+    get_floyd_path,
+    path_stats,
+    select_pareto_path,
+)
 from algorithms import dijkstra, pareto_front, floyd_warshall
 
 
@@ -12,13 +18,13 @@ def demo(path="data/demo.csv"):
 
     print("### DIJKSTRA ###")
     print("balanced path (weight = 1*latency + 10*risk):")
-    path_stats(graph, dijkstra(graph, balanced))
+    path_stats(graph, get_dijkstra_path(graph, dijkstra(graph, balanced)))
     print()
     print("minimum latency path (weight = 1*latency + 0*risk):")
-    path_stats(graph, dijkstra(graph, min_lat))
+    path_stats(graph, get_dijkstra_path(graph, dijkstra(graph, min_lat)))
     print()
     print("minimum risk path (weight = 0*latency + 1*risk):")
-    path_stats(graph, dijkstra(graph, min_risk))
+    path_stats(graph, get_dijkstra_path(graph, dijkstra(graph, min_risk)))
     print("################\n\n")
 
     print("### PARETO FRONT ###")
