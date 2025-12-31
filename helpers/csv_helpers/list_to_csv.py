@@ -8,5 +8,3 @@ def list_to_csv(L:list):
 
         print(f"file saved at: '{path}'")
         return path+'.csv'
-    
-list_to_csv()

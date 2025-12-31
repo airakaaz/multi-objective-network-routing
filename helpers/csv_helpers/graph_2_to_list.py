@@ -1,6 +1,6 @@
 from models.graph_2 import graph
 
-def graph_to_list(g:graph):
+def graph_2_to_list(g:graph):
     L=[]
     L.append(1 if g.symetric else 0)
     L.append([g.nodes_table[0]])

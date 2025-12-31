@@ -1,8 +1,7 @@
 from models.graph_2 import graph
 from helpers.Weight_calculator import Weight_calculator
-from helpers.graph_to_csv import graph_to_csv
 
-def graph_constructor(g:graph=None,nodes_number=None,edges_number=None):
+def graph_2_constructor(g:graph=None,nodes_number=None,edges_number=None):
     if nodes_number is None : nodes_number=int(input("Enter the Nodes number: "))
     if edges_number is None : nodes_number=int(input("Enter the Edges number: "))
     if g is None : g=graph()
@@ -24,4 +23,4 @@ def graph_constructor(g:graph=None,nodes_number=None,edges_number=None):
         except:
             print("the Entered values should be like the given format!")
         
-    return g,graph_to_csv(g=g)
+    return g
