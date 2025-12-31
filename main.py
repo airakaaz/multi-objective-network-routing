@@ -99,6 +99,7 @@ def use_floyd_warshall(graph):
             lambda c: int(c) in (0, 1, 2, 3),
         )
     )
+
     match choice:
         case 1:
             a, b = 1, 0
@@ -121,8 +122,36 @@ def use_floyd_warshall(graph):
             )
         case 0:
             return
+
     table = floyd_warshall(graph, comb_gen(a, b))
-    path_stats(graph, get_floyd_path(graph, table))
+
+    flag = True
+    while flag:
+        src = choose(
+            "pick source (leave empty for default graph source):",
+            lambda n: (n in graph.nodes or n == ""),
+        )
+        if not src:
+            src = graph.src.id
+
+        dest = choose(
+            "pick destination (leave empty for default graph destination):",
+            lambda n: (n in graph.nodes or n == ""),
+        )
+        if not dest:
+            dest = graph.dest.id
+
+        path_stats(graph, get_floyd_path(graph, table, src=src, dest=dest))
+
+        flag = int(
+            choose(
+                """pick another path ?
+        [1]: yes
+        [0]: no
+    ---> """,
+                lambda x: int(x) in (0, 1),
+            )
+        )
 
 
 def use_pareto_front(graph):
