@@ -9,7 +9,20 @@ def get_risk(path):
     return path["cost"][1]
 
 
-def select_pareto_path(paths, lat, risk):
+def select_pareto_path(graph, table, lat, risk, dest=None):
+    if not dest:
+        if not graph.dest:
+            raise ValueError(
+                "no destination specified and graph has no default destination"
+            )
+        else:
+            dest = graph.dest.id
+
+    if dest not in table:
+        raise ValueError("destination not found, graph might not be connexe")
+
+    paths = table[dest]
+
     if lat is None and risk is None:
         raise ValueError("l and r cannot both be None")
 
@@ -19,7 +32,6 @@ def select_pareto_path(paths, lat, risk):
                 raise ValueError("r must be positive")
 
             candidates = [p for p in paths if get_risk(p) <= risk]
-            print(candidates)
             if candidates:
                 return min(candidates, key=get_latency)["path"]
             else:
@@ -30,7 +42,6 @@ def select_pareto_path(paths, lat, risk):
                 raise ValueError("l must be positive")
 
             candidates = [p for p in paths if get_latency(p) <= lat]
-            print(candidates)
             if candidates:
                 return min(candidates, key=get_risk)["path"]
             else:

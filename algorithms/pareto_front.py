@@ -13,12 +13,18 @@ def dominate(o, n):
     return 0
 
 
-def pareto_front(graph):
-    queue = deque([graph.src])
+def pareto_front(graph, src=None):
+    if not src:
+        if not graph.src:
+            raise ValueError("no source specified and graph has no default source")
+        else:
+            src = graph.src.id
+
+    queue = deque([graph.nodes[src]])
     table = {}
     for node in graph.nodes.values():
         table[node.id] = []
-    table[graph.src.id] = [{"cost": (0, 0), "path": [graph.src.id]}]
+    table[src] = [{"cost": (0, 0), "path": [src]}]
 
     while queue:
         curr = queue.popleft()
@@ -51,8 +57,4 @@ def pareto_front(graph):
                     if node not in queue:
                         queue.append(node)
 
-    if graph.dest.id not in table:
-        print("destination is unreachable, the graph might not be connexe")
-        return None
-
-    return table[graph.dest.id]
+    return table

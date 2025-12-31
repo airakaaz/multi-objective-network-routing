@@ -115,9 +115,9 @@ def use_dijkstra(graph):
         flag = int(
             choose(
                 """pick another destination ?
-        [1]: yes
-        [0]: no
-    ---> """,
+                    [1]: yes
+                    [0]: no
+                ---> """,
                 lambda x: int(x) in (0, 1),
             )
         )
@@ -182,72 +182,97 @@ def use_floyd_warshall(graph):
         flag = int(
             choose(
                 """pick another path ?
-        [1]: yes
-        [0]: no
-    ---> """,
+                    [1]: yes
+                    [0]: no
+                ---> """,
                 lambda x: int(x) in (0, 1),
             )
         )
 
 
 def use_pareto_front(graph):
-    paths = pareto_front(graph)
-
-    choice = int(
-        choose(
-            """mode:
-                [1]: minimize latency
-                [2]: minimize risk
-                [3]: custom: weight = a*latency + b*risk
-                [4]: minimize latency with threshold on risk
-                [5]: minimize risk with threshold on latency
-                [0]: cancel
-            ---> """,
-            lambda c: int(c) in (0, 1, 2, 3, 4, 5),
-        )
+    src = choose(
+        "pick source (leave empty for default graph source):",
+        lambda n: (n in graph.nodes or n == ""),
     )
+    if not src:
+        src = graph.src.id
 
-    match choice:
-        case 1:
-            path_stats(graph, select_pareto_path(paths, 1, 0))
-        case 2:
-            path_stats(graph, select_pareto_path(paths, 0, 1))
-        case 3:
-            a = int(
-                choose(
-                    "             a = ",
-                    lambda a: int(a) > 0,
-                    "a must be strictly positive",
-                )
+    table = pareto_front(graph, src=src)
+
+    flag = True
+    while flag:
+        dest = choose(
+            "pick destination (leave empty for default graph destination):",
+            lambda n: (n in graph.nodes or n == ""),
+        )
+        if not dest:
+            dest = graph.dest.id
+        choice = int(
+            choose(
+                """criteria:
+                    [1]: minimize latency
+                    [2]: minimize risk
+                    [3]: custom: weight = a*latency + b*risk
+                    [4]: minimize latency with threshold on risk
+                    [5]: minimize risk with threshold on latency
+                    [0]: cancel
+                ---> """,
+                lambda c: int(c) in (0, 1, 2, 3, 4, 5),
             )
-            b = int(
-                choose(
-                    "             b = ",
-                    lambda b: int(b) > 0,
-                    "b must be strictly positive",
+        )
+
+        match choice:
+            case 1:
+                path_stats(graph, select_pareto_path(graph, table, 1, 0, dest=dest))
+            case 2:
+                path_stats(graph, select_pareto_path(graph, table, 0, 1, dest=dest))
+            case 3:
+                a = int(
+                    choose(
+                        "             a = ",
+                        lambda a: int(a) > 0,
+                        "a must be strictly positive",
+                    )
                 )
-            )
-            path_stats(graph, select_pareto_path(paths, a, b))
-        case 4:
-            t = int(
-                choose(
-                    "     threshold = ",
-                    lambda t: int(t) > 0,
-                    "a must be strictly positive",
+                b = int(
+                    choose(
+                        "             b = ",
+                        lambda b: int(b) > 0,
+                        "b must be strictly positive",
+                    )
                 )
-            )
-            path_stats(graph, select_pareto_path(paths, None, t))
-        case 5:
-            t = int(
-                choose(
-                    "     threshold = ",
-                    lambda t: int(t) > 0,
-                    "a must be strictly positive",
+                path_stats(graph, select_pareto_path(graph, table, a, b, dest=dest))
+            case 4:
+                t = int(
+                    choose(
+                        "     threshold = ",
+                        lambda t: int(t) > 0,
+                        "a must be strictly positive",
+                    )
                 )
+                path_stats(graph, select_pareto_path(graph, table, None, t, dest=dest))
+            case 5:
+                t = int(
+                    choose(
+                        "     threshold = ",
+                        lambda t: int(t) > 0,
+                        "a must be strictly positive",
+                    )
+                )
+                path_stats(graph, select_pareto_path(graph, table, t, None, dest=dest))
+            case 0:
+                return
+
+        flag = int(
+            choose(
+                """pick another criteria/destination ?
+                [1]: yes
+                [0]: no
+            ---> """,
+                lambda x: int(x) in (0, 1),
             )
-            path_stats(graph, select_pareto_path(paths, t, None))
-        case 0:
-            return
+        )
 
 
 def get_path(graph):
