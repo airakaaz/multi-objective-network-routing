@@ -1,9 +1,11 @@
-from models.main import graph
+from models.graph_2 import graph
+from helpers.Weight_calculator import Weight_calculator
+from helpers.graph_to_csv import graph_to_csv
 
-def Weight_calculator(latency,risk,latency_priority=1,risk_priority=10):
-    return latency_priority*latency+risk_priority*risk
-
-def graph_constructor(g:graph,nodes_number=8,edges_number=12):
+def graph_constructor(g:graph=None,nodes_number=None,edges_number=None):
+    if nodes_number is None : nodes_number=int(input("Enter the Nodes number: "))
+    if edges_number is None : nodes_number=int(input("Enter the Edges number: "))
+    if g is None : g=graph()
     for i in range(nodes_number):
         node=input("Enter the node {i}: ")
         if not(g.source_found):
@@ -22,5 +24,4 @@ def graph_constructor(g:graph,nodes_number=8,edges_number=12):
         except:
             print("the Entered values should be like the given format!")
         
-    return g
-
+    return g,graph_to_csv(g=g)

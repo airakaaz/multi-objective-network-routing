@@ -67,5 +67,3 @@ class graph:
             edge_labels=edge_labes
             )
         plt.show()
-
-
