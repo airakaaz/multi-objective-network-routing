@@ -55,7 +55,7 @@ dist, prev = dijkstra(G, source=0)
 
 Reproducibility and Experiments
 -------------------------------
-- Example data sets are stored under `data/` and `sample_data/` to allow experiments to be reproduced.
+- Example dataset are stored under `data/data.csv` to allow experiments to be reproduced.
 - Use the helper scripts in `helpers/` to generate variants of graphs, export them to CSV, and compute path statistics via `path_stats.py`.
 - For multi-criteria evaluation, run the Pareto-front utilities in `algorithms/pareto_front.py` and inspect selected trade-offs using `select_pareto_path.py`.
 
