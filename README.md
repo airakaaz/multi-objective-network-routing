@@ -25,14 +25,14 @@ Repository Structure
 
 Dependencies and Environment
 ----------------------------
-- Python 3.8+ is recommended. The project uses only the Python standard library and lightweight dependencies; if external packages are needed they will be documented in a `requirements.txt` file.
+- Python 3.8+ is recommended. The project uses only the Python standard library and lightweight dependencies.
 - To create an isolated environment (recommended):
 
 ```bash
 python -m venv .venv
-.venv\\Scripts\\activate   # Windows
+.venv\\Scripts\\activate 
 pip install --upgrade pip
-# pip install -r requirements.txt    # if a requirements file is present
+pip install -r requirements.txt
 ```
 
 Usage and Examples
