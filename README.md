@@ -20,7 +20,7 @@ Repository Structure
 	- `get_dijkstra_path.py`, `get_floyd_path.py` — convenience wrappers for algorithm outputs.
 	- `select_pareto_path.py`, `Weight_calculator.py`, `path_stats.py` — multi-criteria selection and evaluation helpers.
 - `models/` — Data model definitions for graphs and nodes.
-- `data/` and `sample_data/` — Example datasets used by demonstration scripts.
+- `data/demo.csv` — Example dataset used by demonstration scripts.
 - `demo.py` / `main.py` — Example drivers and entry points for running experiments and demonstrations.
 
 Dependencies and Environment
